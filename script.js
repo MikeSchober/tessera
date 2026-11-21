@@ -42,9 +42,9 @@ class Matrix {
     genRandom() {
 
         if (!this.rows || !this.cols) {
-            //random num 1 to 5
-            this.rows = Math.ceil(Math.random() * 5);
-            this.cols = Math.ceil(Math.random() * 5);
+            //random num 1 to 4
+            this.rows = Math.ceil(Math.random() * 4);
+            this.cols = Math.ceil(Math.random() * 4);
         };
 
         this.grid = [];
@@ -100,8 +100,46 @@ class Matrix {
 
     };
 
+    //method to build and return dom element for display in browser
+    //returns div element (dom obj)
+    domPrint() {
+
+        const container = document.createElement('div');
+        container.classList.add('outer-matrix');
+
+        let sb = document.createElement('span');
+        sb.innerText = '[';
+        sb.classList.add('sb');
+        let eb = document.createElement('span');
+        eb.innerText = ']';
+        eb.classList.add('eb');
+
+        const innerContainer = document.createElement('div');
+        innerContainer.classList.add('matrix');
+
+        for (let r = 0; r < this.rows; r++) {
+            let newRow = document.createElement('div');
+
+            for (let c = 0; c < this.cols; c++) {
+                const rowEntry = document.createElement('span');
+                let e;
+                (this.grid[r][c].value < 10) ? (e = ` ${this.grid[r][c].value}`) : (e = this.grid[r][c].value)
+                rowEntry.innerText = e;
+                if (this.grid[r][c].color) rowEntry.classList.add(grid[r][c].color);
+                newRow.append(rowEntry);
+            };
+            innerContainer.append(newRow);
+        };
+
+        container.append(sb, innerContainer, eb);
+
+        return container;
+    };
+
     //method to build a random matrix of same size as this matrix
     buildSameSize() {
+
+        return new Matrix(this.rows, this.cols);
 
     };
 
@@ -132,20 +170,43 @@ class Matrix {
 
 
 
-(function terraza() {
+const tessera = (function terraza() {
 
     //global vars
 
+    const opsbox = document.getElementById('ops-box');
+
+    let mOne = undefined;
+    let mTwo = undefined;
 
     //end global vars
 
     //functions scoped to the iife
 
-    //function to read matrix and display in the DOM
-    //takes matrix obj as arg
-    function displayMatrix(m) {
+    //function to generate matrix addition problem and display it in dom
+    function generateAdd() {
 
+        mOne = new Matrix();
+        mTwo = mOne.buildSameSize();
 
+        let sign = document.createElement('span');
+        sign.innerText = '+';
+        sign.classList.add('sign');
+
+        // let sb1 = document.createElement('span');
+        // sb1.innerText = '[';
+        // sb1.classList.add('sb');
+        // let eb1 = document.createElement('span');
+        // eb1.innerText = ']';
+        // eb1.classList.add('eb');
+        // const eb2 = eb1.cloneNode(true);
+        // const sb2 = sb1.cloneNode(true);
+
+        console.log(mOne.domPrint());
+
+        // opsbox.append(mOne.domPrint, sign, mTwo.domPrint);
+        // opsbox.append(sb1, mOne.domPrint(), eb1, sign, sb2, mTwo.domPrint(), eb2);
+        opsbox.append(mOne.domPrint(), sign, mTwo.domPrint());
     };
 
     //function to allow user to build answer
@@ -169,7 +230,7 @@ class Matrix {
     //public methods...
     return {
         //functions for use outside the iife
-
+        generateAdd
 
 
     };
