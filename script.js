@@ -156,7 +156,27 @@ class Matrix {
     ///////
     //class methods
 
-    //addMatrices
+    //method for matrix addition
+    //takes matrix objs as args
+    //returns the sum as a single matrix obj
+    static addMatrices(m1, m2) {
+
+        const sumGrid = [];
+        for (let r = 0; r < m1.rows; r++) {
+            const sumRow = [];
+            for (let e = 0; e < m1.cols; e++) {
+                sumRow.push(((m1.grid[r][e].value) + (m2.grid[r][e].value)));
+            };
+            sumGrid.push(sumRow);
+        };
+
+        console.log(sumGrid)
+
+        const sumMatrix = new Matrix();
+        sumMatrix.gridToMatrix(sumGrid);
+        return sumMatrix;
+    };
+
 
     //subtMatrices
 
@@ -175,6 +195,7 @@ const tessera = (function terraza() {
     //global vars
 
     const opsbox = document.getElementById('ops-box');
+    const instbox = document.getElementById('inst-box');
 
     let mOne = undefined;
     let mTwo = undefined;
@@ -188,6 +209,10 @@ const tessera = (function terraza() {
 
         mOne = new Matrix();
         mTwo = mOne.buildSameSize();
+
+        let inst = document.createElement('div');
+        inst.innerText = 'Add the following matrices:';
+        inst.classList.add('inst');
 
         let sign = document.createElement('span');
         sign.innerText = '+';
@@ -204,14 +229,79 @@ const tessera = (function terraza() {
 
         console.log(mOne.domPrint());
 
+        instbox.append(inst);
+
         // opsbox.append(mOne.domPrint, sign, mTwo.domPrint);
         // opsbox.append(sb1, mOne.domPrint(), eb1, sign, sb2, mTwo.domPrint(), eb2);
         opsbox.append(mOne.domPrint(), sign, mTwo.domPrint());
     };
 
     //function to allow user to build answer
+    //builds blank matrix form in the dom (builds it as modal)
     function buildAns() {
 
+        const modal = document.createElement('div');
+        modal.id = "modal";
+        const modalContent = document.createElement('div');
+        modalContent.id = "modal-content";
+
+        const instDiv = document.createElement('div');
+        instDiv.id = "inst-div";
+        instDiv.innerText = "Select matrix size for answer or click button if operation is not possible."
+
+        const rowColDiv = document.createElement('div');
+        rowColDiv.id = "row-col";
+
+        const labelOne = document.createElement('label');
+        const labelTwo = document.createElement('label');
+
+        const selectOne = document.createElement('select');
+        const optOne = document.createElement('option');
+        optOne.value = "1";
+        optOne.innerText = "1";
+        const optTwo = document.createElement('option');
+        optTwo.value = "2";
+        optTwo.innerText = "2";
+        const optThree = document.createElement('option');
+        optThree.value = "3";
+        optThree.innerText = "3";
+        const optFour = document.createElement('option');
+        optFour.value = "4";
+        optFour.innerText = "4";
+        selectOne.id = "answer-rows";
+        selectOne.append(optOne, optTwo, optThree, optFour);
+        labelOne.innerText = "Rows:"
+        labelOne.append(selectOne);
+
+        const selectTwo = document.createElement('select');
+        const secOptOne = document.createElement('option');
+        secOptOne.value = "1";
+        secOptOne.innerText = "1";
+        const secOptTwo = document.createElement('option');
+        secOptTwo.value = "2";
+        secOptTwo.innerText = "2";
+        const secOptThree = document.createElement('option');
+        secOptThree.value = "3";
+        secOptThree.innerText = "3";
+        const secOptFour = document.createElement('option');
+        secOptFour.value = "4";
+        secOptFour.innerText = "4";
+        selectTwo.id = "answer-rows";
+        selectTwo.append(secOptOne, secOptTwo, secOptThree, secOptFour);
+        selectTwo.id = "answer-cols";
+        labelTwo.innerText = "Columns:";
+        labelTwo.append(selectTwo);
+
+        rowColDiv.append(labelOne, labelTwo);
+
+        const notPsbl = document.createElement('button');
+        notPsbl.innerText = "Operation not possible!";
+        notPsbl.id = "not-psbl";
+
+        modalContent.append(instDiv, rowColDiv, notPsbl);
+        modal.append(modalContent);
+
+        document.querySelector('body').append(modal);
 
     };
 
@@ -230,7 +320,8 @@ const tessera = (function terraza() {
     //public methods...
     return {
         //functions for use outside the iife
-        generateAdd
+        generateAdd,
+        buildAns
 
 
     };
